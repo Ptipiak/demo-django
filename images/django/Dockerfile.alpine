@@ -1,0 +1,40 @@
+FROM alpine:3.15 AS setup
+
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV PYTHONUNBUFFERED=1
+
+ARG WORKING_DIR=/srv/source
+
+FROM setup AS install-setup
+ 
+RUN apk update && \
+apk upgrade && \
+apk add --update --no-cache \
+python3 \
+py3-pip \
+py3-setuptools \
+build-base \
+bash \
+bash-completion
+
+RUN ln -sf /usr/bin/pip3 /usr/bin/pip && \
+ln -sf /usr/bin/python3 /usr/bin/python && \
+pip install --upgrade pip
+
+FROM install-setup AS pip-setup
+
+RUN pip install \
+Django \
+psycopg2-binary \
+djangorestframework \
+markdown \
+django-filter \
+django-environ \
+tzdata \
+phonenumbers \
+django-phonenumber-field
+
+WORKDIR /srv/source
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
