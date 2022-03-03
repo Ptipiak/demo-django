@@ -3,6 +3,8 @@ from datetime import datetime
 from .models import Customer, CustomerContacts, CustomerDetails
 
 class CustomerSerializer(serializers.ModelSerializer):
+    ''' This is the base customer serializer for one customer
+    '''
 
     class Meta:
         model = Customer
@@ -10,29 +12,27 @@ class CustomerSerializer(serializers.ModelSerializer):
             'id',
             'username'
         ]
-
-class CustomerListSerializer(serializers.Serializer):
-
-    class Meta:
-        customers = CustomerSerializer(many=True)
 
 class ContactsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Customer
+        model = CustomerContacts
         fields = [
-            'id',
-            'username'
+            'phone'
         ]
 
 class CustomerDetailsSerializer(serializers.ModelSerializer):
+    ''' This is the details customer serializer for one customer
+    '''
 
     customer = CustomerSerializer()
     contacts = ContactsSerializer()
 
     class Meta:
-        model = CustomerContacts
+        model = CustomerDetails
         fields = [
+            'customer',
+            'contacts',
             'credits',
             'created'
         ]

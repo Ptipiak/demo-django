@@ -21,7 +21,7 @@ class CustomerContacts(models.Model):
 
 class CustomerDetails(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    contacts = models.ForeignKey(CustomerContacts, on_delete=models.PROTECT)
+    contacts = models.ForeignKey(CustomerContacts, on_delete=models.DO_NOTHING)
     credits = models.IntegerField(default=0)
     created = models.DateField(default=datetime.now())
 
@@ -30,10 +30,7 @@ def create_customers_details(sender, instance, created, **kargs):
     contacts = CustomerContacts.objects.create(
         customer=instance
     )
-    details = CustomerDetails.objects.create(
+    CustomerDetails.objects.create(
         customer=instance,
         contacts=contacts
     )
-    contacts.save()
-    details.save()
-
