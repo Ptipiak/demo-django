@@ -34,7 +34,6 @@ class CustomersView(viewsets.ModelViewSet):
     def get_details(self, request, pk=None):
         customer = Customer.objects.get(id=pk)
         customer_details = CustomerDetails.objects.get(customer__id = customer.id)
-        print(customer_details)
         serializer = CustomerDetailsSerializer(customer_details)
         data = serializer.data
         return Response(data)
